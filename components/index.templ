@@ -1,0 +1,25 @@
+package components
+
+templ head() {
+	<title>Test</title>
+	<link rel="stylesheet" href="style.css"/>
+}
+
+templ Clock() {
+	<div class="clock">
+		<div class="text-7xl">22:56</div>
+		<div class="text-xl">30th of January</div>
+	</div>
+}
+
+templ Layout(body templ.Component) {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			@head()
+		</head>
+		<body>
+			@body
+		</body>
+	</html>
+}
