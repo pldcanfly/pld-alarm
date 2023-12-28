@@ -1,25 +1,51 @@
 package components
 
+import "github.com/mmcdole/gofeed"
+
 templ head() {
 	<title>Test</title>
 	<link rel="stylesheet" href="style.css"/>
+	<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 }
 
-templ Clock() {
-	<div class="clock">
-		<div class="text-7xl">22:56</div>
-		<div class="text-xl">30th of January</div>
+templ Clock(time string, date string) {
+	<div class="p-5 text-center" hx-trigger="every 1s" hx-get="/clock" hx-swap="outerHTML">
+		<div class="text-9xl">{ time }</div>
+		<div class="text-4xl">{ date }</div>
 	</div>
 }
 
-templ Layout(body templ.Component) {
+templ Feed(feed *gofeed.Feed) {
+	<div class="p-5 text-center" hx-trigger="every 1s" hx-get="/feed" hx-swap="outerHTML">
+		for _, item := range(feed.Items) {
+			<div>{ item.Custom["group"] }{ item.Title }</div>
+		}
+	</div>
+}
+
+templ card(content templ.Component) {
+	<div class="grid items-center justify-center bg-gray-800">
+		@content
+	</div>
+}
+
+templ rawstring(content string) {
+	{ content }
+}
+
+templ Layout(topleft templ.Component, topright templ.Component) {
 	<!DOCTYPE html>
 	<html>
 		<head>
 			@head()
 		</head>
-		<body>
-			@body
+		<body class="h-screen bg-slate-900 text-slate-50">
+			<div class="grid h-full grid-cols-2 grid-rows-2 gap-5 p-5">
+				@card(topleft)
+				@card(topright)
+				@card(rawstring("Bottom Left"))
+				@card(rawstring("Bottom Right"))
+			</div>
 		</body>
 	</html>
 }
