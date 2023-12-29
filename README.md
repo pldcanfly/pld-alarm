@@ -1,6 +1,6 @@
 # PLD Alarm
 
-A Clock application that is designed to run on a raspberry PI. And later on integrate with Home-Assitant or some homebrewn protocol.
+A Clock application that is designed to run on a raspberry PI. And later on integrate with Home-Assistant or some homebrewn protocol.
 
 Basically a replacement for an Echo Dot which I mainly use just as a clock that plays Radion when I need to wake up. I feel it could do more without creepily watching me sleep.
 
