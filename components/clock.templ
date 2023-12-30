@@ -1,7 +1,7 @@
 package components
 
 templ Clock(time string, date string) {
-	<div class={ cardclasses, "p-5 text-center h-1/3" } hx-trigger="every 1s" hx-get="/clock" hx-swap="outerHTML">
+	<div class={ cardclasses, "p-5 text-center h-1/3 content-center" } hx-trigger="every 1s" hx-get="/clock" hx-swap="outerHTML">
 		<div class="text-9xl">{ time }</div>
 		<div class="text-4xl">{ date }</div>
 	</div>

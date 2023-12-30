@@ -19,6 +19,7 @@ func NewServer(listenAddr string) *Server {
 
 func (s *Server) Run() {
 	e := s.router
+	// TODO: rethink build so it does not require the static folder
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 		Root: "static",
 	}))
