@@ -9,7 +9,7 @@ import (
 )
 
 func getMedia() templ.Component {
-	return components.Media()
+	return components.Media(components.MediaAudio)
 }
 
 func HandleMedia(c echo.Context) error {

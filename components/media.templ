@@ -1,9 +1,21 @@
 package components
 
-templ Media() {
-	<div class={ cardclasses, "p-5 text-left h-full overflow-y-scroll" }>
-		<div id="player">
-			Media Player
+const (
+	MediaYT = iota + 1
+	MediaVideo
+	MediaAudio
+)
+
+templ Media(t int) {
+	<div class={ cardclasses, "p-5 text-center h-full grid-cols-1 grid-rows-1" }>
+		<div class="w-100 place-self-stretch" id="player">
+			if t == MediaAudio {
+				<button class="bg-green-800 p-2" id="play">Play</button>
+				<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
+					<div class="h-full bg-green-800" id="progress_bar" style="width: 50%"></div>
+				</div>
+			}
 		</div>
 	</div>
+	<script src="js/media.js"></script>
 }
