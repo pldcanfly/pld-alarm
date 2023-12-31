@@ -1,0 +1,13 @@
+package components
+
+import "github.com/mmcdole/gofeed"
+
+templ Feed(feed *gofeed.Feed) {
+	<div class={ cardclasses, "p-5 text-left h-full overflow-y-scroll" } hx-trigger="every 1s" hx-get="/feed" hx-swap="innerHTML" hx-select="#feedcontent">
+		<div id="feedcontent">
+			for _, item := range(feed.Items) {
+				<div>{ item.Title }</div>
+			}
+		</div>
+	</div>
+}

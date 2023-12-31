@@ -1,0 +1,33 @@
+package components
+
+templ head() {
+	<title>Test</title>
+	<link rel="stylesheet" href="style.css"/>
+	<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+}
+
+var cardclasses = "bg-gray-800 grid items-center justify-center"
+
+templ Rawstring(content string) {
+	{ content }
+}
+
+templ Layout(top templ.Component, bottom templ.Component, right templ.Component) {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			@head()
+		</head>
+		<body class=" overflow-hidden bg-slate-900 text-slate-50">
+			<div class="flex h-screen w-screen gap-5 p-5">
+				<div class="flex w-1/3 flex-col gap-5">
+					@top
+					@bottom
+				</div>
+				<div class="flex w-2/3 flex-col gap-5">
+					@right
+				</div>
+			</div>
+		</body>
+	</html>
+}
