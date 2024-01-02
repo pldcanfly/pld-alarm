@@ -12,8 +12,11 @@ templ Media(t int) {
 			if t == MediaAudio {
 				<button class="bg-green-800 p-2" id="play">Play</button>
 				<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
-					<div class="h-full bg-green-800" id="progress_bar" style="width: 50%"></div>
+					<div class="h-full bg-green-800" id="progress_bar" style="width: 0%"></div>
 				</div>
+				<audio controls>
+					<source src="test.mp3" type="audio/mpeg"/>
+				</audio>
 			}
 		</div>
 	</div>

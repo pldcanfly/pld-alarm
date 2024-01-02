@@ -11,7 +11,7 @@ import (
 
 func getClock() templ.Component {
 	n := time.Now()
-	t := n.Format("15:04:05")
+	t := n.Format("15:04")
 	d := n.Format("Monday, 2 January ")
 	return components.Clock(t, d)
 }
