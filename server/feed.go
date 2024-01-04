@@ -1,4 +1,4 @@
-package handler
+package server
 
 import (
 	"fmt"
@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/mmcdole/gofeed"
 	"github.com/pldcanfly/pld-alarm/components"
-	"github.com/pldcanfly/pld-alarm/services"
 )
 
 func getFeed() templ.Component {
@@ -22,7 +21,11 @@ func getFeed() templ.Component {
 	return components.Feed(feed)
 }
 
-func HandleNewsFeed(c echo.Context, mediaState *services.MediaState) error {
+func HandleNewsFeed(c echo.Context) error {
+	s, ok := c.Get("server").(*Server)
+	if !ok {
+		return fmt.Errorf("server context error")
+	}
 	c.Response().Header().Add("HX-Push-Url", "/feed")
-	return Render(c, http.StatusOK, Layout(getFeed()))
+	return Render(c, http.StatusOK, Layout(getFeed(), components.StateFeed, s.MediaState))
 }

@@ -2,22 +2,23 @@ package server
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/pldcanfly/pld-alarm/handler"
-	"github.com/pldcanfly/pld-alarm/services"
 )
 
 func (s *Server) setRoutes() {
-	m := s.media
-	s.router.GET("/", MediaHandler(m, handler.HandleRoot))
-	s.router.GET("/clock", MediaHandler(m, handler.HandleClock))
-	s.router.GET("/feed", MediaHandler(m, handler.HandleNewsFeed))
-	s.router.GET("/media", MediaHandler(m, handler.HandleMedia))
+	s.router.GET("/", ContextHandler(s, HandleRoot))
+	s.router.GET("/clock", ContextHandler(s, HandleClock))
+	s.router.GET("/feed", ContextHandler(s, HandleNewsFeed))
+	s.router.GET("/media", ContextHandler(s, HandleMedia))
+
+	s.router.GET("/ws", ContextHandler(s, HandleMediaWS))
+
 }
 
-type MediaHandlerFunc func(c echo.Context, mediaState *services.MediaState) error
+type ContextHandlerFunc func(c echo.Context, s *Server) error
 
-func MediaHandler(mediaState *services.MediaState, h MediaHandlerFunc) echo.HandlerFunc {
+func ContextHandler(s *Server, h echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return h(c, mediaState)
+		c.Set("server", s)
+		return h(c)
 	}
 }

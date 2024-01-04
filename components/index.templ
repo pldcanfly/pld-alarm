@@ -1,6 +1,6 @@
 package components
 
-import "fmt"
+import "github.com/pldcanfly/pld-alarm/services"
 
 templ head() {
 	<title>PLD-Alarm</title>
@@ -15,7 +15,7 @@ const (
 	StateFeed
 )
 
-templ Layout(content templ.Component, clock templ.Component) {
+templ Layout(state int, clock templ.Component, ms *services.MediaState, content templ.Component, ) {
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -30,22 +30,39 @@ templ Layout(content templ.Component, clock templ.Component) {
 					@content
 				</div>
 				<div class="row-span-2 bg-slate-800">
-					@Navigation(1)
+					@Navigation(state)
 				</div>
-				<div class="bg-slate-800">
-					Controls
+				<div id="controls" class="bg-slate-800">
+					@Controls(ms)
 				</div>
 			</div>
 		</body>
 	</html>
 }
 
+const swaps = "#nav,#content,#controls"
+
 templ Navigation(state int) {
 	<div>
 		<ul id="nav">
-			<li>{ fmt.Sprint(state) }</li>
-			<li><a href="/feed" hx-get="/feed" hx-swap="none" hx-select-oob="#nav,#content">Feed</a></li>
-			<li><a href="/media" hx-get="/media" hx-swap="none" hx-select-oob="#nav,#content">Media</a></li>
+			<li>
+				<a
+					class={ "button block bg-green-500", templ.KV("bg-red-500", state == StateFeed) }
+					href="/feed"
+					hx-get="/feed"
+					hx-swap="none"
+					hx-select-oob={ swaps }
+				>Feed</a>
+			</li>
+			<li>
+				<a
+					class={ "button block bg-green-500", templ.KV("bg-red-500", state == StateAudio) }
+					href="/media"
+					hx-get="/media"
+					hx-swap="none"
+					hx-select-oob={ swaps }
+				>Media</a>
+			</li>
 		</ul>
 	</div>
 }

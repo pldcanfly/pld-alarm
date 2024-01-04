@@ -1,24 +1,35 @@
 package components
 
-const (
-	MediaYT = iota + 1
-	MediaVideo
-	MediaAudio
-)
+import "github.com/pldcanfly/pld-alarm/services"
+import "fmt"
 
-templ Media(t int) {
+templ Media(ms *services.MediaState) {
 	<div>
-		<div class="w-100 place-self-stretch" id="player">
-			if t == MediaAudio {
-				<button class="bg-green-800 p-2" id="play">Play</button>
-				<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
-					<div class="h-full bg-green-800" id="progress_bar" style="width: 0%"></div>
-				</div>
-				<audio controls>
-					<source src="test.mp3" type="audio/mpeg"/>
-				</audio>
-			}
-		</div>
+		if ms.Type == services.MediaTypeAudio {
+			@AudioInfo(ms)
+		}
+	</div>
+}
+
+templ AudioInfo(ms *services.MediaState) {
+	<div>
+		<h1>{ ms.Name }</h1>
+	</div>
+}
+
+templ Controls(ms *services.MediaState) {
+	<div>
+		{ fmt.Sprint(ms.Type) }
+		if ms.Type == services.MediaTypeAudio {
+			<span>Audio</span>
+			<button class="bg-green-800 p-2" id="play">Play</button>
+			<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
+				<div class="h-full bg-green-800" id="progress_bar" style="width: 0%"></div>
+			</div>
+			<audio>
+				<source src="test.mp3"/>
+			</audio>
+		}
 	</div>
 	<script src="js/media.js"></script>
 }

@@ -1,7 +1,8 @@
-package handler
+package server
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -21,15 +22,18 @@ func Render(ctx echo.Context, status int, t templ.Component) error {
 	return nil
 }
 
-func Layout(content templ.Component) templ.Component {
-
-	return components.Layout(content, getClock())
+func Layout(content templ.Component, state int, ms *services.MediaState) templ.Component {
+	return components.Layout(state, getClock(), ms, content)
 }
 
 func getNav(state int) templ.Component {
 	return components.Navigation(state)
 }
 
-func HandleRoot(c echo.Context, mediaState *services.MediaState) error {
-	return Render(c, http.StatusOK, Layout(getFeed()))
+func HandleRoot(c echo.Context) error {
+	s, ok := c.Get("server").(*Server)
+	if !ok {
+		return fmt.Errorf("server context error")
+	}
+	return Render(c, http.StatusOK, Layout(getFeed(), components.StateFeed, s.MediaState))
 }
