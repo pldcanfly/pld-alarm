@@ -6,9 +6,7 @@
         const audio = player === null || player === void 0 ? void 0 : player.querySelector("audio");
         const progress = player === null || player === void 0 ? void 0 : player.querySelector("#progress_bar");
         if (play && audio && progress) {
-            setTimeout(() => {
-                audio.play();
-            }, 2000);
+            audio.play();
             audio.addEventListener("timeupdate", () => {
                 const percent = Math.round(audio.currentTime / audio.duration * 100);
                 progress.style.width = percent + "%";

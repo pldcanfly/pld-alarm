@@ -3,17 +3,20 @@ package server
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/pldcanfly/pld-alarm/services"
 )
 
 type Server struct {
 	listenAddr string
 	router     *echo.Echo
+	media      *services.MediaState
 }
 
 func NewServer(listenAddr string) *Server {
 	return &Server{
 		listenAddr: listenAddr,
 		router:     echo.New(),
+		media:      services.NewMediaState(),
 	}
 }
 

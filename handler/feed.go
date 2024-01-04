@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/mmcdole/gofeed"
 	"github.com/pldcanfly/pld-alarm/components"
+	"github.com/pldcanfly/pld-alarm/services"
 )
 
 func getFeed() templ.Component {
@@ -21,7 +22,7 @@ func getFeed() templ.Component {
 	return components.Feed(feed)
 }
 
-func HandleNewsFeed(c echo.Context) error {
-	// return c.String(http.StatusOK, fmt.Sprintf("%+v", feed))
-	return Render(c, http.StatusOK, getFeed())
+func HandleNewsFeed(c echo.Context, mediaState *services.MediaState) error {
+	c.Response().Header().Add("HX-Push-Url", "/feed")
+	return Render(c, http.StatusOK, Layout(getFeed()))
 }

@@ -7,7 +7,7 @@ const (
 )
 
 templ Media(t int) {
-	<div class={ cardclasses, "p-5 text-center h-full grid-cols-1 grid-rows-1" }>
+	<div>
 		<div class="w-100 place-self-stretch" id="player">
 			if t == MediaAudio {
 				<button class="bg-green-800 p-2" id="play">Play</button>
