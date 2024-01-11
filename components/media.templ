@@ -22,14 +22,18 @@ templ Controls(ms *services.MediaState) {
 		{ fmt.Sprint(ms.Type) }
 		if ms.Type == services.MediaTypeAudio {
 			<span>Audio</span>
-			<button class="bg-green-800 p-2" id="play">Play</button>
+			if !ms.Playing {
+				<button class="bg-green-800 p-2" id="play">Play</button>
+			} else {
+				<button class="bg-red-800 p-2" id="stop">Stop</button>
+			}
 			<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
 				<div class="h-full bg-green-800" id="progress_bar" style="width: 0%"></div>
 			</div>
-			<audio>
-				<source src="test.mp3"/>
-			</audio>
 		}
 	</div>
+	<audio>
+		<source src={ ms.Src }/>
+	</audio>
 	<script src="js/media.js"></script>
 }

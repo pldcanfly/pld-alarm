@@ -6,6 +6,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"github.com/mitchellh/mapstructure"
 	"github.com/pldcanfly/pld-alarm/components"
 	"github.com/pldcanfly/pld-alarm/services"
 	"golang.org/x/net/websocket"
@@ -24,20 +25,26 @@ func HandleMedia(c echo.Context) error {
 	ws := s.MediaWS
 	if ws != nil {
 
-		websocket.Message.Send(s.MediaWS, "Handle MediMediaa")
+		websocket.Message.Send(s.MediaWS, "Handle MediaWebsocket")
 	}
 	ms.PlayAudio("test.mp3")
 	c.Response().Header().Add("HX-Push-Url", "/media")
 	return Render(c, http.StatusOK, Layout(getMedia(ms), components.StateAudio, ms))
 }
 
-type PlayerMessage struct {
-	Sender string `json:"sender"`
-	Action string `json:"action"`
-	Data   struct {
-		CurrentTime float64 `json:"currentTime`
-		Duration    float64 `json:"duration"`
-	} `json:"data"`
+type WSMessage struct {
+	Sender string      `json:"sender"`
+	Action string      `json:"action"`
+	Data   interface{} `json:"data"`
+}
+type MessagePlaying struct {
+	CurrentTime float64 `json:"currentTime"`
+	Duration    float64 `json:"duration"`
+}
+
+type MessageTimeUpdate struct {
+	CurrentTime float64 `json:"currentTime"`
+	Duration    float64 `json:"duration"`
 }
 
 func HandleMediaWS(c echo.Context) error {
@@ -50,16 +57,48 @@ func HandleMediaWS(c echo.Context) error {
 		s.MediaWS = ws
 
 		for {
-			var msg PlayerMessage
+			var msg WSMessage
 			err := websocket.JSON.Receive(ws, &msg)
 			if err != nil {
+				fmt.Printf("mediaws: %v", err)
 
-				fmt.Printf("ws: read %v\n", err)
 				return
 			}
-			fmt.Printf("%s\n", msg)
-			s.MediaState.Current = msg.Data.CurrentTime
-			s.MediaState.Duration = msg.Data.Duration
+
+			switch msg.Action {
+			case "playing":
+				var msgPlaying MessagePlaying
+				data, ok := msg.Data.(map[string]interface{})
+				if !ok {
+					fmt.Printf("mediaws: playing: invalid message format")
+				}
+
+				if err := mapstructure.Decode(data, &msgPlaying); err != nil {
+
+					fmt.Printf("mediaws: playing: invalid data format")
+				}
+
+				fmt.Println(msgPlaying)
+			case "timeupdate":
+				var msgTimeupdate MessageTimeUpdate
+				data, ok := msg.Data.(map[string]interface{})
+				if !ok {
+					fmt.Printf("mediaws: timeupdate: invalid message format")
+				}
+
+				if err := mapstructure.Decode(data, &msgTimeupdate); err != nil {
+
+					fmt.Printf("mediaws: timeupdate: invalid data format")
+				}
+
+				fmt.Println(msgTimeupdate)
+
+			}
+
+			// websocket.JSON.Send(ws, PlayerMessage{
+			// 	Sender: "MediaState",
+			// 	Action: "update",
+			// })
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil

@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -18,10 +17,10 @@ func getClock() templ.Component {
 }
 
 func HandleClock(c echo.Context) error {
-	s, ok := c.Get("server").(*Server)
-	if !ok {
-		return fmt.Errorf("server context error")
-	}
-	fmt.Println(s.MediaState)
+	// s, ok := c.Get("server").(*Server)
+	// if !ok {
+	// 	return fmt.Errorf("server context error")
+	// }
+	// fmt.Println(s.MediaState)
 	return Render(c, http.StatusOK, getClock())
 }

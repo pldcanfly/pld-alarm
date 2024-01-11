@@ -10,7 +10,7 @@ func (s *Server) setRoutes() {
 	s.router.GET("/feed", ContextHandler(s, HandleNewsFeed))
 	s.router.GET("/media", ContextHandler(s, HandleMedia))
 
-	s.router.GET("/ws", ContextHandler(s, HandleMediaWS))
+	s.router.GET("/ws/media", ContextHandler(s, HandleMediaWS))
 
 }
 
