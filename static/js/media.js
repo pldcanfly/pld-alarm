@@ -5,9 +5,7 @@
         ws.onopen = () => {
             console.log("connected");
         };
-        ws.onmessage = (e) => {
-            console.log("WS:", e.data);
-        };
+        ws.onmessage = handleMessage;
         const player = document.getElementById("controls");
         const play = player === null || player === void 0 ? void 0 : player.querySelector("#play");
         const audio = player === null || player === void 0 ? void 0 : player.querySelector("audio");
@@ -38,6 +36,9 @@
                 }));
             });
         }
+    };
+    const handleMessage = (e) => {
+        console.log(e.data);
     };
     init();
 })();

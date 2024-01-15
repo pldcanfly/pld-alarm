@@ -9,8 +9,8 @@ func (s *Server) setRoutes() {
 	s.router.GET("/clock", ContextHandler(s, HandleClock))
 	s.router.GET("/feed", ContextHandler(s, HandleNewsFeed))
 	s.router.GET("/media", ContextHandler(s, HandleMedia))
-
-	s.router.GET("/ws/media", ContextHandler(s, HandleMediaWS))
+	s.router.GET("/media/stop", ContextHandler(s, HandleMediaStop))
+	s.router.GET("/media/play", ContextHandler(s, HandleMediaPlay))
 
 }
 

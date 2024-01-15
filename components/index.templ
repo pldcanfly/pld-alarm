@@ -41,8 +41,6 @@ templ Layout(state int, clock templ.Component, ms *services.MediaState, content 
 	</html>
 }
 
-const swaps = "#nav,#content,#controls"
-
 templ Navigation(state int) {
 	<div>
 		<ul id="nav">
@@ -52,7 +50,7 @@ templ Navigation(state int) {
 					href="/feed"
 					hx-get="/feed"
 					hx-swap="none"
-					hx-select-oob={ swaps }
+					hx-select-oob="#nav,#content,#controls"
 				>Feed</a>
 			</li>
 			<li>
@@ -61,8 +59,8 @@ templ Navigation(state int) {
 					href="/media"
 					hx-get="/media"
 					hx-swap="none"
-					hx-select-oob={ swaps }
-				>Media</a>
+					hx-select-oob="#nav,#content,#controls"
+				>MediaInfo</a>
 			</li>
 		</ul>
 	</div>
