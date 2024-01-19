@@ -1,12 +1,10 @@
 package services
 
 import (
-	"bytes"
 	"fmt"
-	"os"
 
 	"github.com/ebitengine/oto/v3"
-	"github.com/hajimehoshi/go-mp3"
+	"github.com/pldcanfly/pld-alarm/media"
 )
 
 const (
@@ -15,14 +13,12 @@ const (
 )
 
 type MediaState struct {
-	Type     int
 	Duration float64
 	Current  float64
 	Playing  bool
-	Src      string
-	Name     string
 	Context  *oto.Context
 	Player   *oto.Player
+	Media    media.Media
 }
 
 func NewMediaState() *MediaState {
@@ -40,35 +36,28 @@ func NewMediaState() *MediaState {
 	}
 }
 
+func (ms *MediaState) GetName() string {
+	if !ms.Playing {
+		return ""
+	}
+
+	return ms.Media.GetName()
+}
+
 func (ms *MediaState) PlayAudio(src string) {
-	ms.Type = MediaTypeAudio
-	ms.Src = src
-	ms.Name = "TEST"
+	var err error
+	ms.Media, err = media.NewMP3("test.mp3")
+	if err != nil {
+		fmt.Printf("Media Error %v", err)
+		return
+	}
 	ms.Playing = true
-
-	file, err := os.ReadFile(fmt.Sprintf("static/%v", src))
-	if err != nil {
-		fmt.Println("could not read mp3")
-		return
-	}
-
-	fbr := bytes.NewReader(file)
-	dec, err := mp3.NewDecoder(fbr)
-	if err != nil {
-		fmt.Println("decoder failed")
-		return
-	}
-
-	ms.Player = ms.Context.NewPlayer(dec)
+	ms.Player = ms.Context.NewPlayer(ms.Media.GetStream())
 	ms.Player.Play()
 
 }
 
 func (ms *MediaState) StopAudio() {
-	ms.Type = 0
-	ms.Src = ""
-	ms.Name = ""
 	ms.Playing = false
-
 	ms.Player.Close()
 }

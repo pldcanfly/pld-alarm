@@ -5,20 +5,17 @@ import "fmt"
 
 templ Media(ms *services.MediaState) {
 	<div>
-		if ms.Type == services.MediaTypeAudio {
-			@AudioInfo(ms)
-		}
+		@AudioInfo(ms)
 	</div>
 }
 
 templ AudioInfo(ms *services.MediaState) {
 	<div>
-		<h1>{ ms.Name }</h1>
+		<h1>{ ms.GetName() }</h1>
 	</div>
 }
 
 templ Controls(ms *services.MediaState) {
-	{ fmt.Sprint(ms.Type) }
 	{ fmt.Sprint(ms.Playing) }
 	<span>Audio</span>
 	if !ms.Playing {
