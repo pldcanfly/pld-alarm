@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/hajimehoshi/go-mp3"
 )
@@ -30,16 +31,16 @@ func (m *MP3Media) GetSrc() string {
 }
 
 func NewMP3(src string) (*MP3Media, error) {
-
-	file, err := os.ReadFile(fmt.Sprintf("static/%v", src))
-	if err != nil {
-		return &MP3Media{}, fmt.Errorf("mp3: %w", err)
+	var dec io.Reader
+	var err error
+	if strings.HasPrefix(src, "http://") || strings.HasPrefix(src, "https://") {
+		dec, err = remoteMP3(src)
+	} else {
+		dec, err = localMP3(src)
 	}
 
-	fbr := bytes.NewReader(file)
-	dec, err := mp3.NewDecoder(fbr)
 	if err != nil {
-		return &MP3Media{}, fmt.Errorf("mp3: %w", err)
+		return &MP3Media{}, err
 	}
 
 	return &MP3Media{
@@ -49,21 +50,32 @@ func NewMP3(src string) (*MP3Media, error) {
 	}, nil
 }
 
-func NewRemoteMP3(src string) (*MP3Media, error) {
+func localMP3(src string) (io.Reader, error) {
+	file, err := os.ReadFile(fmt.Sprintf("static/%v", src))
+	if err != nil {
+		return nil, fmt.Errorf("mp3: %w", err)
+	}
+
+	fbr := bytes.NewReader(file)
+	dec, err := mp3.NewDecoder(fbr)
+	if err != nil {
+		return nil, fmt.Errorf("mp3: %w", err)
+	}
+
+	return dec, nil
+}
+
+func remoteMP3(src string) (io.Reader, error) {
 	file, err := http.Get(src)
 	if err != nil {
-		return &MP3Media{}, fmt.Errorf("mp3: %w", err)
+		return nil, fmt.Errorf("remote mp3: %w", err)
 	}
 	defer file.Body.Close()
 
 	dec, err := mp3.NewDecoder(file.Body)
 	if err != nil {
-		return &MP3Media{}, fmt.Errorf("mp3: %w", err)
+		return nil, fmt.Errorf("remote mp3: %w", err)
 	}
+	return dec, nil
 
-	return &MP3Media{
-		name:   "test",
-		src:    src,
-		stream: dec,
-	}, nil
 }

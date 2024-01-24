@@ -31,7 +31,10 @@ func HandleMediaPlay(c echo.Context) error {
 		return fmt.Errorf("server context error")
 	}
 	ms := s.MediaState
-	ms.PlayAudio("test.mp3")
+	err := ms.PlayAudio("test.mp3")
+	if err != nil {
+		return err
+	}
 	return HandleMedia(c)
 }
 

@@ -44,16 +44,17 @@ func (ms *MediaState) GetName() string {
 	return ms.Media.GetName()
 }
 
-func (ms *MediaState) PlayAudio(src string) {
+func (ms *MediaState) PlayAudio(src string) error {
 	var err error
-	ms.Media, err = media.NewMP3("test.mp3")
+	ms.Media, err = media.NewMedia(src)
 	if err != nil {
-		fmt.Printf("Media Error %v", err)
-		return
+		return fmt.Errorf("Media Error %w", err)
+
 	}
 	ms.Playing = true
 	ms.Player = ms.Context.NewPlayer(ms.Media.GetStream())
 	ms.Player.Play()
+	return nil
 
 }
 
