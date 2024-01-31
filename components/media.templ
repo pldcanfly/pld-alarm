@@ -11,6 +11,11 @@ templ Media(ms *services.MediaState) {
 
 templ AudioInfo(ms *services.MediaState) {
 	<div>
+		<div hx-sse="connect:/alarm">
+			<div hx-sse="swap:test">
+				HI MOM!
+			</div>
+		</div>
 		<h1>{ ms.GetName() }</h1>
 	</div>
 }
@@ -38,6 +43,7 @@ templ Controls(ms *services.MediaState) {
 			hx-select-oob="#nav,#content,#controls"
 		>Stop</button>
 	}
+	<button hx-get="/snooze" hx-swap="none">Snooze</button>
 	<div class="w-50 relative mt-3 h-3 overflow-hidden rounded-xl bg-slate-950" id="progress">
 		<div class="h-full bg-green-800" id="progress_bar" style="width: 0%"></div>
 	</div>

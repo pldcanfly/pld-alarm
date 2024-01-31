@@ -9,5 +9,5 @@ build: prepare
 	cp -r ./static/ ./build/
 	go build -o build/pld-alarm main.go
 
-run: build
-	cd build && ./pld-alarm
+run: 
+	nix-shell -p pkg-config alsa-lib --command air

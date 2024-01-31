@@ -12,6 +12,9 @@ func (s *Server) setRoutes() {
 	s.router.GET("/media/stop", ContextHandler(s, HandleMediaStop))
 	s.router.GET("/media/play", ContextHandler(s, HandleMediaPlay))
 
+	s.router.GET("/alarm", ContextHandler(s, HandleAlarmEvents))
+	s.router.GET("/snooze", ContextHandler(s, HandleSnooze))
+
 }
 
 type ContextHandlerFunc func(c echo.Context, s *Server) error
