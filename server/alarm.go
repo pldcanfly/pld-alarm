@@ -23,7 +23,6 @@ func HandleAlarmEvents(c echo.Context) error {
 
 	s.AlarmEventContext = c.Response()
 	i := 0
-	fmt.Printf("%v", s)
 	for {
 		i++
 		fmt.Println(i)

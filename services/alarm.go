@@ -33,7 +33,6 @@ func NewAlarm(h int, m int, s string, ms *MediaState) *Alarm {
 		for {
 
 			if a.Active {
-				fmt.Println("gofunc", a.NextRing)
 				now := time.Now()
 
 				if now.Compare(a.NextRing) >= 1 {

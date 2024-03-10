@@ -10,4 +10,5 @@ build: prepare
 	go build -o build/pld-alarm main.go
 
 run: 
-	nix-shell -p pkg-config alsa-lib --command air
+	air
+	# nix-shell -p pkg-config alsa-lib --command air

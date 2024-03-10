@@ -1,3 +1,6 @@
+Rewrite in progress. I think I learned enough about the technologies I wanted to explore with this. Now I want to do it the right way and learn some thing new along the lines. Since I already use the native audio-driver since it just works better then trying to fiddle around with the ``<audio>`` element, I will be doing it as a native application via [fyne](https://fyne.io/).
+
+
 # PLD Alarm
 
 A Clock application that is designed to run on a raspberry PI. And later on integrate with Home-Assistant or some homebrewn protocol.
